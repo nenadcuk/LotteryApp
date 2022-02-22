@@ -1,0 +1,63 @@
+import java.util.Random;
+import java.util.Scanner;
+import java.util.Set;
+import java.util.TreeSet;
+
+public class MainClass {
+
+    public static final int NUMBERS = 6;
+    public static final int MAX_NUMBERS = 40;
+    public static final int PRIZE = 100;
+
+    public static void main(String[] args){
+        // The program should randomly generate a winning lottery ticket
+        // Prompt the player to enter lotto numbers from 1 to 40
+        // Depending on how many numbers match, the player wins various prizes
+
+        // 3 - Getting winning number and ticket sets
+        Set<Integer> winning = createWinningNumbers();
+        Set<Integer> ticket = getTicket();
+
+        // 4 - Keeping only winning numbers from user's ticket
+        // using retainAll() to remove non-matched numbers
+        Set<Integer> matches = new TreeSet<>(ticket);
+        matches.retainAll(winning);
+
+        // 5 - Calculating the prize
+        System.out.println("Your ticket was: " + ticket);
+        System.out.println("Winning Numbers are: " + winning);
+        if (matches.size()>0){
+            double prize = PRIZE * Math.pow(2, matches.size());
+            System.out.println("Matched numbers are: " + matches);
+            System.out.printf("Your prize is $%.2f\n", prize);
+        }
+
+
+    }
+
+    // Method 1 - generates a set of the winning numbers
+    public static Set<Integer> createWinningNumbers(){
+        Set<Integer> winning = new TreeSet<>();
+        Random random = new Random();
+
+        while (winning.size() < NUMBERS){
+            int number = random.nextInt(MAX_NUMBERS) + 1;
+            winning.add(number);
+        }
+        return winning;
+    }
+
+    // Method 2 - Reading the player's lottery ticket from the console
+    public static Set<Integer> getTicket(){
+        Set<Integer> ticket = new TreeSet<>();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter "+NUMBERS+" lotto numbers: " );
+
+        while (ticket.size() < NUMBERS){
+            int number = scanner.nextInt();
+            if (number<=MAX_NUMBERS)
+                ticket.add(number);
+        }
+        return ticket;
+    }
+}
